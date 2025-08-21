@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id "io.freefair.lombok" version "8.2.2"
+    id 'io.qameta.allure' version '2.11.2'
 }
 
 group 'ru.netology'
@@ -10,17 +11,37 @@ sourceCompatibility = 11
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
 
+allure {
+    version = '2.20.1'
+    autoconfigure = true
+    aspectjweaver = true
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    // Юнит-тесты и Selenide
     testImplementation 'org.junit.jupiter:junit-jupiter:5.7.0'
-    testImplementation 'com.codeborne:selenide:6.17.2'
+    testImplementation 'com.codeborne:selenide:6.17.1'
+
+    // Все необходимое для интеграции с Allure
+    testImplementation 'io.qameta.allure:allure-selenide:2.20.1'
+    testImplementation 'io.qameta.allure:allure-junit5:2.20.1'
+
+    // Библиотеки для генерации фейковых данных
     testImplementation 'com.github.javafaker:javafaker:1.0.2'
+
+    // WebDriverManager для автоматической установки драйверов браузеров
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.5.3'
+
+    // Lombok для упрощения работы с POJO-классами
+    compileOnly 'org.projectlombok:lombok:1.18.28'
+    annotationProcessor 'org.projectlombok:lombok:1.18.28'
 }
 
 test {
     useJUnitPlatform()
-    systemProperty 'selenide.headless', System.getProperty('selenide.headless')
+    systemProperty 'selenide.headless', System.getProperty('selenide.headless') // Возможность запуска тестов в headless-режиме
 }
